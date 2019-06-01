@@ -154,61 +154,108 @@
 /********************** 5.3.2 **********************/
 // import processing.opengl.*;
 
-float xstart, xnoise, ystart, ynoise, zstart, znoise;
+// float xstart, xnoise, ystart, ynoise, zstart, znoise;
 
-int sideLength = 200;
-int spacing = 5;
+// int sideLength = 200;
+// int spacing = 5;
+
+// void setup()
+// {
+//     size(500, 300, P3D);
+//     background(0);
+//     noStroke();
+
+//     xstart = random(10);
+//     ystart = random(10);
+//     zstart = random(10);
+// }
+
+// void draw()
+// {
+//     background(0);
+
+//     xstart += 0.01;
+//     ystart += 0.01;
+//     zstart += 0.01;
+//     xnoise = xstart;
+//     ynoise = ystart;
+//     znoise = zstart;
+
+//     translate(150, 20, -150);
+//     rotateZ(frameCount * 0.1);
+//     rotateY(frameCount * 0.1);
+
+//     for (int z = 0; z <= sideLength; z += spacing)
+//     {
+//         znoise += 0.1;
+//         ynoise = ystart;
+
+//     for (int y = 0; y <= height; y += 5)
+//     {
+//         ynoise += 0.1;
+//         xnoise = xstart;
+//         for (int x = 0; x <= width; x += 5)
+//         {
+//             xnoise += 0.1;
+//             drawPoint(x, y, z, noise(xnoise, ynoise, znoise));
+//         }
+//     }
+//     }
+// }
+
+// void drawPoint(float x, float y, float z, float noiseFactor)
+// {
+//     pushMatrix();
+//     translate(x, y, z);
+//     float grey = noiseFactor * 255;
+//     fill(grey, 10);
+//     box(spacing, spacing, spacing);
+//     popMatrix();
+// }
+
+/********************** 5.3.3 **********************/
+import processing.opengl.*;
+
+int radius = 100;
 
 void setup()
 {
-    size(500, 300, P3D);
-    background(0);
-    noStroke();
-
-    xstart = random(10);
-    ystart = random(10);
-    zstart = random(10);
+    size(500, 300, OPENGL);
+    background(255);
+    stroke(0);
 }
 
 void draw()
 {
-    background(0);
+    background(255);
+    translate(width/2, height/2);
+    rotateY(frameCount * 0.03);
+    rotateX(frameCount * 0.04);
 
-    xstart += 0.01;
-    ystart += 0.01;
-    zstart += 0.01;
-    xnoise = xstart;
-    ynoise = ystart;
-    znoise = zstart;
+    float s = 0;
+    float t = 0;
+    float lastx = 0;
+    float lasty = 0;
+    float lastz = 0;
 
-    translate(150, 20, -150);
-    rotateZ(frameCount * 0.1);
-    rotateY(frameCount * 0.1);
-
-    for (int z = 0; z <= sideLength; z += spacing)
+    while(t < 180)
     {
-        znoise += 0.1;
-        ynoise = ystart;
+        s += 18;
+        t += 1;
+        float radianS = radians(s);
+        float radianT = radians(t);
 
-    for (int y = 0; y <= height; y += 5)
-    {
-        ynoise += 0.1;
-        xnoise = xstart;
-        for (int x = 0; x <= width; x += 5)
+        float thisx = 0 + (radius * cos(radianS) * sin(radianT));
+        float thisy = 0 + (radius * sin(radianS) * sin(radianT));
+        float thisz = 0 + (radius * cos(radianT));
+
+        if (lastx != 0)
         {
-            xnoise += 0.1;
-            drawPoint(x, y, z, noise(xnoise, ynoise, znoise));
+            line(thisx, thisy, thisz, lastx, lasty, lastz);
         }
-    }
-    }
-}
 
-void drawPoint(float x, float y, float z, float noiseFactor)
-{
-    pushMatrix();
-    translate(x, y, z);
-    float grey = noiseFactor * 255;
-    fill(grey, 10);
-    box(spacing, spacing, spacing);
-    popMatrix();
+        lastx = thisx;
+        lasty = thisy;
+        lastz = thisz;
+    }
 }
