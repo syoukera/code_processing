@@ -56,7 +56,7 @@ void draw()
     {
         for (int y = 0; y < _numY; y++)
         {
-            _cellArray[x][y].cellNextState();
+            _cellArray[x][y].calcNextState();
         }
     }
 
@@ -78,19 +78,31 @@ void mousePressed()
 
 class Cell{
     float x, y;
-    boolean state;
-    boolean nextState;
+    // 7.1.2 and 7.1.3
+    // boolean state;
+    // boolean nextState;
+
+    // 7.1.4
+    int state;
+    int nextState;
+
     Cell[] neighbours;
 
     Cell(float ex, float why)
     {
         x = ex * _cellSize;
         y = why * _cellSize;
-        if (random(2) > 1) {
-            nextState = true;
-        } else {
-            nextState = false;
-        }
+
+        // 7.1.2 and 7.1.3
+        // if (random(2) > 1) {
+        //     nextState = true;
+        // } else {
+        //     nextState = false;
+        // }
+
+        // 7.1.4
+        nextState = int(random(2));
+        
         state = nextState;
         neighbours = new Cell[0];
     }
@@ -100,20 +112,109 @@ class Cell{
         neighbours = (Cell[])append(neighbours, cell);
     }
 
-    void cellNextState()
-    {
-        // to come
-    }
+/************************* 7.1.2 *************************/
+    // void calcNextState()
+    // {
+    //     int liveCount = 0;
+    //     for (int i = 0; i < neighbours.length; i++)
+    //     {
+    //         if (neighbours[i].state == true) {
+    //             liveCount++;
+    //         }
+    //     }
 
+    //     if (state == true) {
+    //         if ((liveCount == 2) || (liveCount == 3)) {
+    //             nextState = true;
+    //         } else {
+    //             nextState = false;
+    //         }
+    //     } else {
+    //         if (liveCount == 3) {
+    //             nextState = true;
+    //         } else {
+    //             nextState = false;
+    //         }
+    //     }
+    // }
+/************************* 7.1.2 *************************/
+
+/************************* 7.1.3 *************************/
+// void calcNextState()
+// {
+//     int liveCount = 0;
+//     if (state) { liveCount++; }
+//     for (int i = 0; i < neighbours.length; i++)
+//     {
+//         if (neighbours[i].state == true) {
+//             liveCount++;
+//         }
+//     }
+
+//     if (liveCount <= 4) {
+//         nextState = false;
+//     } else if (liveCount > 4) {
+//         nextState = true;
+//     }
+
+//     if ((liveCount == 4) || (liveCount == 5)) {
+//         nextState = !nextState;
+//     }
+// }
+/************************* 7.1.3 *************************/
+
+/************************* 7.1.4 *************************/
+void calcNextState()
+{
+    if (state == 0) {
+        int firingCount = 0;
+        for (int i = 0; i < neighbours.length; i++)
+        {
+            if (neighbours[i].state == 1) {
+                firingCount++;
+            }
+        }
+        if (firingCount == 2) {
+            nextState = 1;
+        } else {
+            nextState = state;
+        }
+    } else if (state == 1) {
+        nextState = 2;
+    } else if (state == 2) {
+        nextState = 0;
+    }
+}
+/************************* 7.1.4 *************************/
+
+/************************* 7.1.2-3 *************************/
+//     void drawMe()
+//     {
+//         state = nextState;
+//         stroke(0);
+//         if (state == true) {
+//             fill(0);
+//         } else {
+//             fill(255);
+//         }
+//         ellipse(x, y, _cellSize, _cellSize);
+//     }
+// }
+/************************* 7.1.2-3 *************************/
+
+/************************* 7.1.4 *************************/
     void drawMe()
     {
         state = nextState;
         stroke(0);
-        if (state == true) {
+        if (state == 1) {
             fill(0);
+        } else if (state == 2) {
+            fill(150);
         } else {
             fill(255);
         }
         ellipse(x, y, _cellSize, _cellSize);
     }
 }
+/************************* 7.1.4 *************************/
