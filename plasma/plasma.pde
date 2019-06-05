@@ -23,7 +23,7 @@ void draw()
         _electronArr[i].update();
         _electronArr[i].showMe();
     }
-    saveFrame("frames/####.png");
+    // saveFrame("frames/####.png");
     // ffmpeg -y -r 20 -pattern_type glob -i "./frames/*.png" -an -pix_fmt yuv420p -vcodec h264 -profile:v baseline ionization.mp4
 }
 
@@ -68,6 +68,11 @@ class Electron
             Electron newElectron = new Electron(x, y, random(10) - 5, random(10) - 5);
             _electronArr = (Electron[])append(_electronArr, newElectron);
         }
+    }
+
+    void attachment()
+    {
+        
     }
 
     void showMe()
